@@ -1,0 +1,338 @@
+[
+  {
+    "op": "core/column-rename",
+    "description": "Rename column RADIUS_OF_AREA to radius_area",
+    "oldColumnName": "RADIUS_OF_AREA",
+    "newColumnName": "radius_area"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column radius_area to radius",
+    "oldColumnName": "radius_area",
+    "newColumnName": "radius"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column CENTER_LATITUDE to latitude",
+    "oldColumnName": "CENTER_LATITUDE",
+    "newColumnName": "latitude"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column CENTER_LONGITUDE to longitude",
+    "oldColumnName": "CENTER_LONGITUDE",
+    "newColumnName": "longitude"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column TOTAL_PERSONS to total_persons",
+    "oldColumnName": "TOTAL_PERSONS",
+    "newColumnName": "total_persons"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column LAND_AREA to land_area",
+    "oldColumnName": "LAND_AREA",
+    "newColumnName": "land_area"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column WATER_AREA to water_area",
+    "oldColumnName": "WATER_AREA",
+    "newColumnName": "water_area"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column POPULATION_DENSITY to pop_density",
+    "oldColumnName": "POPULATION_DENSITY",
+    "newColumnName": "pop_density"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column MINORITY_POPULATION to minority_pop",
+    "oldColumnName": "MINORITY_POPULATION",
+    "newColumnName": "minority_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column HOUSEHOLDS to households",
+    "oldColumnName": "HOUSEHOLDS",
+    "newColumnName": "households"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column HOUSING_UNITS to housing_units",
+    "oldColumnName": "HOUSING_UNITS",
+    "newColumnName": "housing_units"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column HOUSEHOLDS_PUBLIC_ASSISTANCE to households_public_assistance",
+    "oldColumnName": "HOUSEHOLDS_PUBLIC_ASSISTANCE",
+    "newColumnName": "households_public_assistance"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column PERSONS_BELOW_POVERTY_LEVEL to persons_below_poverty_level",
+    "oldColumnName": "PERSONS_BELOW_POVERTY_LEVEL",
+    "newColumnName": "persons_below_poverty_level"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column WHITE_POPULATION to white_pop",
+    "oldColumnName": "WHITE_POPULATION",
+    "newColumnName": "white_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column AFRICAN_AMERICAN_POPULATION to african_american_pop",
+    "oldColumnName": "AFRICAN_AMERICAN_POPULATION",
+    "newColumnName": "african_american_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column HISPANIC_ORIGIN_POPULATION to hispanic_origin_pop",
+    "oldColumnName": "HISPANIC_ORIGIN_POPULATION",
+    "newColumnName": "hispanic_origin_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column ASIAN_PACIFIC_ISLANDER_POP to asian_pacific_islander_pop",
+    "oldColumnName": "ASIAN_PACIFIC_ISLANDER_POP",
+    "newColumnName": "asian_pacific_islander_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column AMERICAN_INDIAN_POPULATION to american_indian_pop",
+    "oldColumnName": "AMERICAN_INDIAN_POPULATION",
+    "newColumnName": "american_indian_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column OTHER_MULTIRACIAL_POPULATION to multiracial_pop",
+    "oldColumnName": "OTHER_MULTIRACIAL_POPULATION",
+    "newColumnName": "multiracial_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column CHILD_5_0_POPULATION to child_5_0_population",
+    "oldColumnName": "CHILD_5_0_POPULATION",
+    "newColumnName": "child_5_0_population"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column MINORS_17_0_POPULATION to minors_17_0_population",
+    "oldColumnName": "MINORS_17_0_POPULATION",
+    "newColumnName": "minors_17_0_population"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column ADULTS_18_PLUS_POPULATION to adults_18_plus_population",
+    "oldColumnName": "ADULTS_18_PLUS_POPULATION",
+    "newColumnName": "adults_18_plus_population"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column SENIORS_65_PLUS_POPULATION to seniors_65_plus_population",
+    "oldColumnName": "SENIORS_65_PLUS_POPULATION",
+    "newColumnName": "seniors_65_plus_population"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column LESS_THAN_9TH_GRADE_POPULATION to less_than_9th_grade_pop",
+    "oldColumnName": "LESS_THAN_9TH_GRADE_POPULATION",
+    "newColumnName": "less_than_9th_grade_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column child_5_0_population to child_5_0_pop",
+    "oldColumnName": "child_5_0_population",
+    "newColumnName": "child_5_0_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column minors_17_0_population to minors_17_0_pop",
+    "oldColumnName": "minors_17_0_population",
+    "newColumnName": "minors_17_0_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column adults_18_plus_population to adults_18_plus_pop",
+    "oldColumnName": "adults_18_plus_population",
+    "newColumnName": "adults_18_plus_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column seniors_65_plus_population to seniors_65_plus_pop",
+    "oldColumnName": "seniors_65_plus_population",
+    "newColumnName": "seniors_65_plus_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column GRADES_9_12_POPULATION to grades_9_12_pop",
+    "oldColumnName": "GRADES_9_12_POPULATION",
+    "newColumnName": "grades_9_12_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column HIGH_SCHOOL_DIPLOMA_POPULATION to high_school_diploma_pop",
+    "oldColumnName": "HIGH_SCHOOL_DIPLOMA_POPULATION",
+    "newColumnName": "high_school_diploma_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column SOME_COLLEGE_POPULATION to some_college_pop",
+    "oldColumnName": "SOME_COLLEGE_POPULATION",
+    "newColumnName": "some_college_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column BS_BA_OR_MORE_POPULATION to bs_ba_more_pop",
+    "oldColumnName": "BS_BA_OR_MORE_POPULATION",
+    "newColumnName": "bs_ba_more_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column INCOME_LESS_15K_HSHLDS to income_less_15k_house",
+    "oldColumnName": "INCOME_LESS_15K_HSHLDS",
+    "newColumnName": "income_less_15k_house"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column INCOME_15K_25K_HSHLDS to income_15k_25k_house",
+    "oldColumnName": "INCOME_15K_25K_HSHLDS",
+    "newColumnName": "income_15k_25k_house"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column Longitude to longitude_2",
+    "oldColumnName": "Longitude",
+    "newColumnName": "longitude_2"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column Latitude to latitude_2",
+    "oldColumnName": "Latitude",
+    "newColumnName": "latitude_2"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column total_releases_on-off-site_lbs to position 0",
+    "columnName": "total_releases_on-off-site_lbs",
+    "index": 0
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column Facility to position 0",
+    "columnName": "Facility",
+    "index": 0
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column V_TRI_FORM_R_EZ.TRI_FACILITY_ID to tri_facility_id",
+    "oldColumnName": "V_TRI_FORM_R_EZ.TRI_FACILITY_ID",
+    "newColumnName": "tri_facility_id"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column V_TRI_FORM_R_EZ.STATE_ABBR to state",
+    "oldColumnName": "V_TRI_FORM_R_EZ.STATE_ABBR",
+    "newColumnName": "state"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column V_TRI_FORM_R_EZ.FACILITY_NAME to facility_name_2",
+    "oldColumnName": "V_TRI_FORM_R_EZ.FACILITY_NAME",
+    "newColumnName": "facility_name_2"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column facility_name_2 to position 0",
+    "columnName": "facility_name_2",
+    "index": 0
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column V_TRI_FORM_R_EZ.COUNTY_NAME to county_name",
+    "oldColumnName": "V_TRI_FORM_R_EZ.COUNTY_NAME",
+    "newColumnName": "county_name"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column V_TRI_FORM_R_EZ.CITY_NAME to city_name",
+    "oldColumnName": "V_TRI_FORM_R_EZ.CITY_NAME",
+    "newColumnName": "city_name"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column ACS_POPULATION to acs_pop",
+    "oldColumnName": "ACS_POPULATION",
+    "newColumnName": "acs_pop"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column INCOME_GREATER_75K_HSHLDS to income_greater_75k_house",
+    "oldColumnName": "INCOME_GREATER_75K_HSHLDS",
+    "newColumnName": "income_greater_75k_house"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column INCOME_50K_75K_HSHLDS to income_50k_75k_house",
+    "oldColumnName": "INCOME_50K_75K_HSHLDS",
+    "newColumnName": "income_50k_75k_house"
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column INCOME_25K_50K_HSHLDS to income_25k_50k_house",
+    "oldColumnName": "INCOME_25K_50K_HSHLDS",
+    "newColumnName": "income_25k_50k_house"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column frs_id to position 0",
+    "columnName": "frs_id",
+    "index": 0
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column facility_name to position 0",
+    "columnName": "facility_name",
+    "index": 0
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column frs_id to position 0",
+    "columnName": "frs_id",
+    "index": 0
+  },
+  {
+    "op": "core/column-rename",
+    "description": "Rename column Facility to facility_name_3",
+    "oldColumnName": "Facility",
+    "newColumnName": "facility_name_3"
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column latitude to position 54",
+    "columnName": "latitude",
+    "index": 54
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column longitude to position 54",
+    "columnName": "longitude",
+    "index": 54
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column latitude_2 to position 54",
+    "columnName": "latitude_2",
+    "index": 54
+  },
+  {
+    "op": "core/column-move",
+    "description": "Move column longitude_2 to position 54",
+    "columnName": "longitude_2",
+    "index": 54
+  }
+]
