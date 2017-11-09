@@ -1,0 +1,23 @@
+File a full project update via your GitHub account, so that I can see your visualizations, data etc. Also write a summary in Markdown, including:
+
+What you have done
+What you intend to do
+Problems, obstacles
+
+Nov. 8 2017 — Data Viz Final Project Update
+
+To date, I have requested and received data from the U.S. Environmental Protection Agency on oil refineries and the demographic makeup of the communities surrounding them. This alone took a lot of wrangling — most of which I did toward the end of the summer and early on in the semester. This data alone, though, wasn't enough. Not only did I want to see where in the U.S. refineries are located and who's living around them, but I wanted to see who was living around the dirtiest refineries.
+
+To this end, I searched for data that a). would quantify a refinery's pollution and b). would be compatible with the data I received from the EPA. One promising dataset was the U.S. Department of Energy's list of operating refineries by the number of barrrels they refine per day. But after speaking with a DOE flak, I found out that (of course) DOE and EPA use two different systems of identifying refineries. Therefore the data from each agency would be incompatible.
+
+I settled on EPA data, from the Toxic Release Inventory, that quantifies each refinery's "on-site and off-site" release of toxins. However, this may not be the best metric, as it treats each toxin the same, when one pound of Toxin A may be much more dangerous than 100 pounds of Toxin B. I'm using this measurement for now, but I'm hoping to find a TRI guru who can advise me on which measurement would best capture how much a refinery pollutes. This person may be Matt Dempsey at the Houston Chronicle, who has done a lot of reporting in this area (but who has also not done a lot of responding to emails).
+
+I spent more than a week cleaning all my data and preparing it for a join. In order to get a common column on which to join, I had to join two separate TRI datasets and then join that with my original EPA demographics data. By the end of this process, I had one table with all of the demographic data for the communities within a 1, 3 and 5-mile radius of each refinery, along with the name of the refinery and the amount (in pounds) of on and off-site toxic release. 
+
+With Peter's help, I used this dataset to set up scatter plots, in an effort to find correlation between the amount of toxins released and the percentage of poor people and people of color in the surrounding area. (We also tried to set up a correlation matrix, but some R quirk stumped us.) In doing so, we found no positive correlation between the two factors. However, it's important to note that we may not be using the best metric for measuring pollution.
+
+In the meantime — while I search for the best method of measuring pollution — I've used the joined data to further examine the relationship between refinery location and pollution to the demographics of the surrounding areas. In this update folder, I've attached a Tableau file that includes a map I've made showing each refinery, scaled by the amount of toxins it releases and shaded by the percentage of minority people living in the the three mile radius. I don't think a map is the best way of visualizing this but it is spurring some more questions. 
+
+Next, I'd like to pull in Census data to compare the percentages of poor people and people of color surrounding the refineries to the percentages of those populations in the county, state or country. Doing this would not necessarily require a measure of how much each refinery pollutes, so it's something I can tackle while I pursue that other data. I've attempted this using the R tidycensus package, but I wasn't able to get the script working correctly — it spit out a couple different error messages. My hope is to iron this out in a one-on-one meeting with Peter.
+
+Finally, one thought I've had is that I should not be looking only to see whether poorer, minority populations are living near high-polluting facilities, but should also step back and note, simply, who is living near these refineries, across the country. Are the communities that surround them disproportionately poor or made up of more people of color? And how do these numbers match up against the country's demographics? My hypothesis remains that, if you are poor or a minority, you're more likely to live near an oil refinery. I'd like to test this. 
