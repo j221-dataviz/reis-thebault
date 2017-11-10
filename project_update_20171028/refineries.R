@@ -12,7 +12,7 @@ refineries_names <- read_csv('refineries_names.csv')
 refineries_demo_names <- inner_join(refineries_demo, refineries_names, by=c("frs_id" = "frs_id"))
 
 #deleting all those pesky nulls --- why are they there?? 
-# A - BOTH OF YOUR CSVs have hundreds of empry rows at the end, so every null gets joined to every null from the 
+# A - BOTH OF YOUR CSVs have hundreds of empty rows at the end, so every null gets joined to every null from the 
 # other data frame in the join. Let's look at why that was the case, just to be sure nothing went wrong earlyer
 refineries_demo_names <- refineries_demo_names[-c(755:170294),]
 
@@ -59,6 +59,21 @@ refineries_3mile <- refineries_master %>%
 
 refineries_5mile <- refineries_master %>%
   filter(radius == '5')
+
+# create data frame for correlation matrix
+refineries_1mile_cor <- refineries_1mile %>%
+  select(5,19,21,40) %>%
+  rename(tri = `total_releases_on-off-site_lbs`)
+
+# correlation matrix - not working because of some problem with tri data
+round(cor(refineries_1mile_cor),2)
+
+# sample scatterplot
+ggplot(refineries_1mile_cor, aes(y=pct_15k_25k,x=tri)) +
+  geom_point() +
+  geom_smooth()
+
+
 
 
 
