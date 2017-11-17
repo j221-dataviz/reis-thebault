@@ -3,6 +3,7 @@
 library(readr)
 library(dplyr)
 library(ggplot2)
+library(scales)
 
 # reading csvs
 refineries_demo <- read_csv('refineries_demo.csv')
@@ -142,4 +143,50 @@ refineries_compare <- inner_join(refineries_master, states, by = c("state"="Abbr
 
 #creating column that compares the pct of minorities surrounding refineries to the state pct
 refineries_compare <- refineries_compare %>%
-  mutate(minority_compare = pct_minority - pc_minority_population)
+  mutate(minority_compare = pct_minority/pc_minority_population) 
+
+# renaming problem TRI emissions variable, and then creating new one in millions of lbs
+refineries_compare <- refineries_compare %>%
+  rename(total_releases = `total_releases_on-off-site_lbs`) %>%
+  mutate(total_releases_mil = total_releases/10^6)
+
+# correlation between releases and minority compare
+ggplot(subset(refineries_compare, radius==5), aes(x=minority_compare, y=total_releases_mil)) +
+  geom_point(aes(size=acs_pop), color = "red", alpha = 0.5) +
+  ggtitle("Population within 5 miles of refinery") +
+  scale_x_continuous(breaks = c(0,0.5,1,2,3,4), labels = c("Zero","Half","","Twice","3 times","4 times")) +
+  scale_y_continuous(labels = comma) +
+  scale_size_area(max_size = 10, guide = FALSE) +
+  xlab("% minority population, compared to % for entire state") +
+  ylab("Toxic releases (million lbs)") +
+  geom_vline(xintercept = 1, linetype = "dotted") +
+  theme_minimal()
+  
+ggplot(subset(refineries_compare, radius==3), aes(x=minority_compare, y=total_releases_mil)) +
+  geom_point(aes(size=acs_pop), color = "red", alpha = 0.5) +
+  ggtitle("Population within 3 miles of refinery") +
+  scale_x_continuous(breaks = c(0,0.5,1,2,3,4), labels = c("Zero","Half","","Twice","3 times","4 times")) +
+  scale_y_continuous(labels = comma) +
+  scale_size_area(max_size = 10, guide = FALSE) +
+  xlab("% minority population, compared to % for entire state") +
+  ylab("Toxic releases (million lbs)") +
+  geom_vline(xintercept = 1, linetype = "dotted") +
+  theme_minimal()
+
+ggplot(subset(refineries_compare, radius==1), aes(x=minority_compare, y=total_releases_mil)) +
+  geom_point(aes(size=acs_pop), color = "red", alpha = 0.5) +
+  ggtitle("Population within 1 mile of refinery") +
+  scale_x_continuous(breaks = c(0,0.5,1,2,3,4), labels = c("Zero","Half","","Twice","3 times","4 times")) +
+  scale_y_continuous(labels = comma) +
+  scale_size_area(max_size = 10, guide = FALSE) +
+  xlab("% minority population, compared to % for entire state") +
+  ylab("Toxic releases (million lbs)") +
+  geom_vline(xintercept = 1, linetype = "dotted") +
+  theme_minimal()
+
+
+
+
+
+
+
