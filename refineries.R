@@ -91,14 +91,7 @@ acs10 <- load_variables(2010, "acs5", cache = TRUE)
 census10_sf1 <- load_variables(2010, "sf1", cache = TRUE)
 
 #############
-# get 2010 Census data, by state
-
-# population
-population <- get_decennial(geography = "state", 
-                            variables = "P0010001",
-                            year = 2010) %>%
-  rename(population = value)  %>%
-  select(1,2,4)
+# get 2010 Census/ACS data, by state
 
 name <- as.data.frame(state.name)
 abb <- as.data.frame(state.abb)
@@ -108,20 +101,12 @@ states <- data_frame %>%
   mutate(NAME = name ,ABB = abb)
 names(states) <- c("NAME","ABB")
 
-# number of households
-households <- get_decennial(geography = "state",
-                            variables = "P0190001",
+# population
+population <- get_decennial(geography = "state", 
+                            variables = "P0010001",
                             year = 2010) %>%
-  rename(households = value) %>%
+  rename(population = value)  %>%
   select(1,2,4)
-
-# number of persons in poverty
-poverty <- get_acs(geography = "state",
-                         variables = "B17001_002E",
-                         year =  2010) %>%
-  rename(people_in_poverty = estimate) %>%
-  select(1,2,4)
-
 
 # white population (white alone, not hispanic)
 white_population <- get_decennial(geography = "state",
@@ -130,31 +115,46 @@ white_population <- get_decennial(geography = "state",
   rename(white_population = value) %>%
   select(1,2,4)
 
+# join these  
+population <- inner_join(white_population,population)
+
+# # number of households
+# households <- get_decennial(geography = "state",
+#                             variables = "P0190001",
+#                             year = 2010) %>%
+#   rename(households = value) %>%
+#   select(1,2,4)
+
+# number of persons in poverty
+poverty <- get_acs(geography = "state",
+                         variables = "B17001_002",
+                         year =  2010) %>%
+  rename(people_in_poverty = estimate) %>%
+  select(1,2,4)
+
+# denominator for number of persons in poverty
+denom_poverty <- get_acs(geography = "state",
+                   variables = "B17001_001",
+                   year =  2010) %>%
+  rename(denom_poverty = estimate) %>%
+  select(1,2,4)
+
+# join those
+poverty <- inner_join(poverty,denom_poverty)
+
 # join data frames into one, calculate percentages where necessary
-states <- inner_join(population,white_population)
-
-states <- inner_join(states,poverty, by=c("GEOID"="GEOID","NAME"="NAME")) %>%
+states <- inner_join(states,poverty) 
+states <- inner_join(states,population) %>%
   mutate(pc_white_population = round(white_population/population*100,2),
-         pc_minority_population = 100 - pc_white_population)
-
-states <- states %>%
-  mutate(pc_people_in_poverty = round(people_in_poverty/population*100,2))
+         pc_minority_population = 100 - pc_white_population,
+         pc_people_in_poverty = round(people_in_poverty/denom_poverty*100,2))
 
 
 #renaming and reordering columns for clarity
 states <- states %>%
-  select(1:3,7,8)
-
-states <- states %>%
+  select(1:3,9,10) %>%
   rename(state_pc_minority_pop = pc_minority_population,
          state_pc_poverty_pop = pc_people_in_poverty)
-
-
-#bringing in csv of state abbs
-state_abb <- read_csv("states_abb.csv")
-
-#joining here ... losing Puerto Rico
-states <- inner_join(states, state_abb, by=c("NAME"="State"))
 
 # Some cleaning: remove any NaNs from data, replace with zero
 is.nan.data.frame <- function(x)
