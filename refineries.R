@@ -4,6 +4,14 @@ library(readr)
 library(dplyr)
 library(ggplot2)
 library(scales)
+library(leaflet)
+library(rgdal)
+library(quantmod)
+library(highcharter)
+library(RColorBrewer)
+library(forcats)
+library(htmlwidgets)
+library(ggiraph)
 
 # reading csvs
 refineries_demo <- read_csv('refineries_demo.csv')
@@ -202,7 +210,7 @@ ggplot(subset(refineries_compare, radius==5), aes(x=minority_compare, y=total_re
   theme_minimal()
   
 ggplot(subset(refineries_compare, radius==3), aes(x=minority_compare, y=total_releases_mil)) +
-  geom_point(aes(size=minority_pop), color = "red", alpha = 0.5) +
+  geom_point(aes(size=minority_pop), color = "#006d2c", alpha = 0.5) +
   ggtitle("Population within 3 miles of refinery") +
   scale_x_continuous(breaks = c(0,0.5,1,2,3,4), labels = c("Zero","Half","","Twice","3 times","4 times")) +
   scale_y_continuous(labels = comma) +
@@ -237,7 +245,7 @@ ggplot(subset(refineries_compare, radius==5), aes(x=poverty_compare, y=total_rel
   theme_minimal()
 
 ggplot(subset(refineries_compare, radius==3), aes(x=poverty_compare, y=total_releases_mil)) +
-  geom_point(aes(size=persons_below_poverty_level), color = "red", alpha = 0.5) +
+  geom_point(aes(size=persons_below_poverty_level), color = "#54278f", alpha = 0.5) +
   ggtitle("Population within 3 miles of refinery") +
   scale_x_continuous(breaks = c(0,0.5,1,2,3,4,5), labels = c("Zero","Half","","Twice","3 times","4 times","5 times")) +
   scale_y_continuous(labels = comma) +
@@ -261,5 +269,28 @@ ggplot(subset(refineries_compare, radius==1), aes(x=poverty_compare, y=total_rel
 
 
 
+#grabbing only refineries with more than x waste
 
+poverty_map <- refineries_compare %>%
+  filter(radius==3) %>%
+  filter(total_releases_mil>=.5)
+
+
+# set color palette
+pal <- colorBin("#54278f", poverty_map$poverty_compare, bins = 5, pretty = TRUE)
+
+# mapping refineries with more than x waste by effect on poor ... trying to get the fill color to be darker according to the poverty_compare column but having trouble
+leaflet() %>%
+  setView(lng = -98.5795, lat = 39.828175, zoom = 4) %>%
+  addProviderTiles("CartoDB.Positron") %>%
+  addCircles(
+    data = poverty_map,
+    radius = sqrt(poverty_map$total_releases_mil)*50000,
+    color = "#54278f",
+    weight = 0.2,
+    fillColor = "#54278f",
+    fillOpacity = 0.5,
+    popup = paste0("<strong>Percent of surrounding people in poverty: </strong>", poverty_map$pct_poverty, "</br>",
+                   "<strong>Total pounds of toxic releases (millions): </strong>", poverty_map$total_releases_mil)
+    )
 
