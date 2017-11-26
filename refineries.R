@@ -185,7 +185,7 @@ states_map@data <- left_join(states_map@data, states)
 writeOGR(states_map,"states_map", layer="states_map", driver = "ESRI Shapefile")
 
 #joining refineries_master with states to compare demographics
-refineries_compare <- inner_join(refineries_master, states, by = c("state"="Abbreviation"))
+refineries_compare <- inner_join(refineries_master, states, by = c("state"="ABB"))
 
 #creating column that compares the pct of minorities/pct of poverty surrounding refineries to the state pct
 refineries_compare <- refineries_compare %>%
@@ -276,10 +276,13 @@ poverty_map <- refineries_compare %>%
   filter(total_releases_mil>=.5)
 
 
-# set color palette
-pal <- colorBin("#54278f", poverty_map$poverty_compare, bins = 5, pretty = TRUE)
+# setting quantile breaks
+breaks <- quantile(poverty_map$poverty_compare, probs = seq(0,1,0.2), na.rm=TRUE)
 
-# mapping refineries with more than x waste by effect on poor ... trying to get the fill color to be darker according to the poverty_compare column but having trouble
+# set color palette
+binpal <- colorBin("Purples", poverty_map$poverty_compare, breaks)
+
+# mapping refineries with more than x waste by effect on poor
 leaflet() %>%
   setView(lng = -98.5795, lat = 39.828175, zoom = 4) %>%
   addProviderTiles("CartoDB.Positron") %>%
@@ -288,7 +291,7 @@ leaflet() %>%
     radius = sqrt(poverty_map$total_releases_mil)*50000,
     color = "#54278f",
     weight = 0.2,
-    fillColor = "#54278f",
+    fillColor = ~binpal(poverty_compare),
     fillOpacity = 0.5,
     popup = paste0("<strong>Percent of surrounding people in poverty: </strong>", poverty_map$pct_poverty, "</br>",
                    "<strong>Total pounds of toxic releases (millions): </strong>", poverty_map$total_releases_mil)
