@@ -12,6 +12,7 @@ library(RColorBrewer)
 library(forcats)
 library(htmlwidgets)
 library(ggiraph)
+library(tidyverse)
 
 # reading csvs
 refineries_demo <- read_csv('refineries_demo.csv')
@@ -296,4 +297,65 @@ leaflet() %>%
     popup = paste0("<strong>Percent of surrounding people in poverty: </strong>", poverty_map$pct_poverty, "</br>",
                    "<strong>Total pounds of toxic releases (millions): </strong>", poverty_map$total_releases_mil)
     )
+
+
+
+# creating cleveland dot plots
+
+
+# creating df of refineries in Texas, Louisiana and California, limiting to top 15 toxic releasers
+tx_chart <- refineries_compare %>%
+  filter(radius==3) %>%
+  filter(state=="TX") %>%
+  arrange(desc(total_releases_mil)) %>%
+  head(15)
+
+ca_chart <- refineries_compare %>%
+  filter(radius==3) %>%
+  filter(state=="CA") %>%
+  arrange(desc(total_releases_mil)) %>%
+  head(15)
+
+la_chart <- refineries_compare %>%
+  filter(radius==3) %>%
+  filter(state=="LA") %>%
+  arrange(desc(total_releases_mil)) %>%
+  head(15)
+
+# plotting charts
+ggplot(tx_chart) +
+  geom_segment( aes(x=facility_name, xend=facility_name, y=state_pc_poverty_pop, yend=pct_poverty), color="grey") +
+  geom_point( aes(x=facility_name, y=state_pc_poverty_pop), color="#aaaaaa", size=3 ) +
+  geom_point( aes(x=facility_name, y=pct_poverty), color="#6a51a3", size=3 ) +
+  coord_flip()+
+  theme_light() +
+  theme(
+    legend.position = "none",
+    panel.border = element_blank(),) +
+  xlab("") +
+  ylab("")
+
+ggplot(ca_chart) +
+  geom_segment( aes(x=facility_name, xend=facility_name, y=state_pc_poverty_pop, yend=pct_poverty), color="grey") +
+  geom_point( aes(x=facility_name, y=state_pc_poverty_pop), color="#aaaaaa", size=3 ) +
+  geom_point( aes(x=facility_name, y=pct_poverty), color="#6a51a3", size=3 ) +
+  coord_flip()+
+  theme_light() +
+  theme(
+    legend.position = "none",
+    panel.border = element_blank(),) +
+  xlab("") +
+  ylab("")
+
+ggplot(la_chart) +
+  geom_segment( aes(x=facility_name, xend=facility_name, y=state_pc_poverty_pop, yend=pct_poverty), color="grey") +
+  geom_point( aes(x=facility_name, y=state_pc_poverty_pop), color="#aaaaaa", size=3 ) +
+  geom_point( aes(x=facility_name, y=pct_poverty), color="#6a51a3", size=3 ) +
+  coord_flip()+
+  theme_light() +
+  theme(
+    legend.position = "none",
+    panel.border = element_blank(),) +
+  xlab("") +
+  ylab("")
 
