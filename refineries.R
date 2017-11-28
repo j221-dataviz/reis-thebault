@@ -359,3 +359,16 @@ ggplot(la_chart) +
   xlab("") +
   ylab("")
 
+# creating bubble charts
+
+ggplot(tx_chart, aes(x="", y = reorder(facility_name, +total_releases_mil)))+
+  geom_point(aes(size = total_releases_mil, color = "#6a51a3"), alpha = 0.7) +
+  scale_size_area(guide = FALSE, max_size = 15) +
+  theme(axis.line=element_blank(),axis.text.x=element_blank(),
+        axis.text.y=element_blank(),axis.ticks=element_blank(),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank(),legend.position="none",
+        panel.background=element_blank(),panel.border=element_blank(),panel.grid.major=element_blank(),
+        panel.grid.minor=element_blank(),plot.background=element_blank())
+  
+
