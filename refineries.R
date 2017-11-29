@@ -348,16 +348,21 @@ ggplot(ca_chart) +
   ylab("")
 
 ggplot(la_chart) +
-  geom_segment( aes(x=facility_name, xend=facility_name, y=state_pc_poverty_pop, yend=pct_poverty), color="grey") +
-  geom_point( aes(x=facility_name, y=state_pc_poverty_pop), color="#aaaaaa", size=3 ) +
-  geom_point( aes(x=facility_name, y=pct_poverty), color="#6a51a3", size=3 ) +
-  coord_flip()+
+  geom_segment(color="#6a51a3", aes(xend=facility_name, x=reorder(facility_name, total_releases_mil), y=state_pc_poverty_pop, yend=pct_poverty), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=facility_name, y=state_pc_poverty_pop), color="#6a51a3", size=1.5 ) +
+  geom_point( aes(size=total_releases_mil, x=facility_name, y=0), alpha = 0.5) +
+  scale_size_area(max_size = 10) +
+  scale_y_continuous(limits=c(-10,70), breaks = c(20,40,60)) +
   theme_light() +
   theme(
     legend.position = "none",
-    panel.border = element_blank(),) +
+    panel.border = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y = element_blank()) +
   xlab("") +
-  ylab("")
+  ylab("") +
+  geom_hline(yintercept=0, size=0.1) +
+  coord_flip()
 
 # creating bubble charts
 
