@@ -13,6 +13,7 @@ library(forcats)
 library(htmlwidgets)
 library(ggiraph)
 library(tidyverse)
+library(data.table)
 
 # reading csvs
 refineries_demo <- read_csv('refineries_demo.csv')
@@ -300,8 +301,6 @@ leaflet() %>%
 
 
 
-# creating cleveland dot plots
-
 
 # creating df of refineries in Texas, Louisiana and California, limiting to top 15 toxic releasers
 tx_chart <- refineries_compare %>%
@@ -322,35 +321,48 @@ la_chart <- refineries_compare %>%
   arrange(desc(total_releases_mil)) %>%
   head(15)
 
-# plotting charts
-ggplot(tx_chart) +
-  geom_segment( aes(x=facility_name, xend=facility_name, y=state_pc_poverty_pop, yend=pct_poverty), color="grey") +
-  geom_point( aes(x=facility_name, y=state_pc_poverty_pop), color="#aaaaaa", size=3 ) +
-  geom_point( aes(x=facility_name, y=pct_poverty), color="#6a51a3", size=3 ) +
-  coord_flip()+
+# creating new columns with edited refinery names
+
+tx_chart <- tx_chart %>%
+  mutate(refinery_names = c("Blanchard, Texas City", "Valero, Corpus Christi", "ExxonMobil, Baytown", "Valero, Texas City", "Diamond Shamrock, Sunray", "Motiva, Port Arthur", "Flint Hills Resources (West), Corpus Christi", "Flint Hills Resources (East), Corpus Christ", "Deer Park, Deer Park", "ExxonMobil, Beaumont", "Citgo, Corpus Christi", "Phillips 66, Borger", "Premcor, Port Arthur", "Total, Port Arthur", "Phillips 66, Old Ocean"))
+
+ca_chart <- ca_chart %>%
+  mutate(refinery_names = c("Chevron, El Segundo", "Phillips 66, Rodeo", "Chevron, Richmond", "Valero, Benicia", "Tesoro, Carson", "Shell, Martinez", "Tesoro, Martinez", "ExxonMobil, Torrance", "Phillips 66, Wilmington", "Ultramar, Wilmington", "Phillips 66, Carson", "Kern, Bakersfield", "Phillips 66, Arroyo Grande", "San Joaquin, Bakersfield", "Lunday-Thagard, South Gate"))
+
+la_chart <- la_chart %>%
+  mutate(refinery_names = c("ExxonMobil, Baton Rouge", "Citgo, Sulphur", "Phillips 66, Westlake", "Valero, Norco", "Marathon, Garyville", "Chalmette, Chalmette", "Phillips 66, Belle Chasse", "Motiva, Norco", "Alon, Krotz Springs", "Convent, Convent", "Placid, Port Allen", "Calumet, Shreveport", "Valero, Meraux", "Rain CII Carbon, Sulphur", "Calcasieu, Lake Charles"))
+
+# plotting charts for poverty
+
+# TESTING ON THIS CHART
+tx_chart_gg <- ggplot(tx_chart) +
+  geom_segment_interactive(color="#6a51a3", aes(tooltip = paste0("Fenceline population in poverty:", pct_poverty,"%"), xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_poverty_pop, yend=pct_poverty, data_id = refinery_names), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=refinery_names, y=state_pc_poverty_pop), color="#6a51a3", size=1.5 ) +
+  geom_point_interactive(aes(tooltip = paste0("Toxic waste released (millions lbs):", total_releases_mil),
+                             size = total_releases_mil, x=refinery_names, y=0, data_id = refinery_names), alpha = 0.5) +
+  scale_size_area(max_size = 10) +
+  scale_y_continuous(limits=c(-10,70), breaks = c(20,40,60)) +
   theme_light() +
   theme(
     legend.position = "none",
-    panel.border = element_blank(),) +
-  xlab("") +
-  ylab("")
+    panel.border = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y = element_blank()) +
+  xlab("Refinery, by toxic waste produced") +
+  ylab("% fenceline community in poverty, compared to statewide") +
+  geom_hline(yintercept=0, size=0.1) +
+  coord_flip()
+
+tx_chart_interactive <- ggiraph(code = print(tx_chart_gg), height_svg=4,
+                                hover_css = "cursor:pointer;fill-opacity:0.8;stroke:red",
+                                tooltip_extra_css = "background-color:#f0f0f0;color:black;padding:5px")
+print(tx_chart_interactive)
+
 
 ggplot(ca_chart) +
-  geom_segment( aes(x=facility_name, xend=facility_name, y=state_pc_poverty_pop, yend=pct_poverty), color="grey") +
-  geom_point( aes(x=facility_name, y=state_pc_poverty_pop), color="#aaaaaa", size=3 ) +
-  geom_point( aes(x=facility_name, y=pct_poverty), color="#6a51a3", size=3 ) +
-  coord_flip()+
-  theme_light() +
-  theme(
-    legend.position = "none",
-    panel.border = element_blank(),) +
-  xlab("") +
-  ylab("")
-
-ggplot(la_chart) +
-  geom_segment(color="#6a51a3", aes(xend=facility_name, x=reorder(facility_name, total_releases_mil), y=state_pc_poverty_pop, yend=pct_poverty), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
-  geom_point( aes(x=facility_name, y=state_pc_poverty_pop), color="#6a51a3", size=1.5 ) +
-  geom_point( aes(size=total_releases_mil, x=facility_name, y=0), alpha = 0.5) +
+  geom_segment(color="#6a51a3", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_poverty_pop, yend=pct_poverty), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=refinery_names, y=state_pc_poverty_pop), color="#6a51a3", size=1.5 ) +
+  geom_point( aes(size=total_releases_mil, x=refinery_names, y=0), alpha = 0.5) +
   scale_size_area(max_size = 10) +
   scale_y_continuous(limits=c(-10,70), breaks = c(20,40,60)) +
   theme_light() +
@@ -364,16 +376,73 @@ ggplot(la_chart) +
   geom_hline(yintercept=0, size=0.1) +
   coord_flip()
 
-# creating bubble charts
+ggplot(la_chart) +
+  geom_segment(color="#6a51a3", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_poverty_pop, yend=pct_poverty), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=refinery_names, y=state_pc_poverty_pop), color="#6a51a3", size=1.5 ) +
+  geom_point( aes(size=total_releases_mil, x=refinery_names, y=0), alpha = 0.5) +
+  scale_size_area(max_size = 10) +
+  scale_y_continuous(limits=c(-10,70), breaks = c(20,40,60)) +
+  theme_light() +
+  theme(
+    legend.position = "none",
+    panel.border = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y = element_blank()) +
+  xlab("") +
+  ylab("") +
+  geom_hline(yintercept=0, size=0.1) +
+  coord_flip()
 
-ggplot(tx_chart, aes(x="", y = reorder(facility_name, +total_releases_mil)))+
-  geom_point(aes(size = total_releases_mil, color = "#6a51a3"), alpha = 0.7) +
-  scale_size_area(guide = FALSE, max_size = 15) +
-  theme(axis.line=element_blank(),axis.text.x=element_blank(),
-        axis.text.y=element_blank(),axis.ticks=element_blank(),
-        axis.title.x=element_blank(),
-        axis.title.y=element_blank(),legend.position="none",
-        panel.background=element_blank(),panel.border=element_blank(),panel.grid.major=element_blank(),
-        panel.grid.minor=element_blank(),plot.background=element_blank())
-  
+# plotting charts for race
+ggplot(tx_chart) +
+  geom_segment(color="#6a51a3", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_minority_pop, yend=pct_minority), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=refinery_names, y=state_pc_minority_pop), color="#6a51a3", size=1.5 ) +
+  geom_point( aes(size=total_releases_mil, x=refinery_names, y=0), alpha = 0.5) +
+  scale_size_area(max_size = 10) +
+  scale_y_continuous(limits=c(-10,70), breaks = c(20,40,60)) +
+  theme_light() +
+  theme(
+    legend.position = "none",
+    panel.border = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y = element_blank()) +
+  xlab("") +
+  ylab("") +
+  geom_hline(yintercept=0, size=0.1) +
+  coord_flip()
+
+ggplot(ca_chart) +
+  geom_segment(color="#6a51a3", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_minority_pop, yend=pct_minority), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=refinery_names, y=state_pc_minority_pop), color="#6a51a3", size=1.5 ) +
+  geom_point( aes(size=total_releases_mil, x=refinery_names, y=0), alpha = 0.5) +
+  scale_size_area(max_size = 10) +
+  scale_y_continuous(limits=c(-10,90), breaks = c(20,40,60)) +
+  theme_light() +
+  theme(
+    legend.position = "none",
+    panel.border = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y = element_blank()) +
+  xlab("") +
+  ylab("") +
+  geom_hline(yintercept=0, size=0.1) +
+  coord_flip()
+
+ggplot(la_chart) +
+  geom_segment(color="#6a51a3", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_minority_pop, yend=pct_minority), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=refinery_names, y=state_pc_minority_pop), color="#6a51a3", size=1.5 ) +
+  geom_point( aes(size=total_releases_mil, x=refinery_names, y=0), alpha = 0.5) +
+  scale_size_area(max_size = 10) +
+  scale_y_continuous(limits=c(-10,70), breaks = c(20,40,60)) +
+  theme_light() +
+  theme(
+    legend.position = "none",
+    panel.border = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y = element_blank()) +
+  xlab("") +
+  ylab("") +
+  geom_hline(yintercept=0, size=0.1) +
+  coord_flip()
+
 
