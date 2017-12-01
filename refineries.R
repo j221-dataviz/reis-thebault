@@ -324,7 +324,7 @@ la_chart <- refineries_compare %>%
 # creating new columns with edited refinery names
 
 tx_chart <- tx_chart %>%
-  mutate(refinery_names = c("Blanchard, Texas City", "Valero, Corpus Christi", "ExxonMobil, Baytown", "Valero, Texas City", "Diamond Shamrock, Sunray", "Motiva, Port Arthur", "Flint Hills Resources (West), Corpus Christi", "Flint Hills Resources (East), Corpus Christ", "Deer Park, Deer Park", "ExxonMobil, Beaumont", "Citgo, Corpus Christi", "Phillips 66, Borger", "Premcor, Port Arthur", "Total, Port Arthur", "Phillips 66, Old Ocean"))
+  mutate(refinery_names = c("Blanchard, Texas City", "Valero, Corpus Christi", "ExxonMobil, Baytown", "Valero, Texas City", "Diamond Shamrock, Sunray", "Motiva, Port Arthur", "Flint Hills Resources (West), Corpus Christi", "Flint Hills Resources (East), Corpus Christi", "Deer Park, Deer Park", "ExxonMobil, Beaumont", "Citgo, Corpus Christi", "Phillips 66, Borger", "Premcor, Port Arthur", "Total, Port Arthur", "Phillips 66, Old Ocean"))
 
 ca_chart <- ca_chart %>%
   mutate(refinery_names = c("Chevron, El Segundo", "Phillips 66, Rodeo", "Chevron, Richmond", "Valero, Benicia", "Tesoro, Carson", "Shell, Martinez", "Tesoro, Martinez", "ExxonMobil, Torrance", "Phillips 66, Wilmington", "Ultramar, Wilmington", "Phillips 66, Carson", "Kern, Bakersfield", "Phillips 66, Arroyo Grande", "San Joaquin, Bakersfield", "Lunday-Thagard, South Gate"))
@@ -336,10 +336,10 @@ la_chart <- la_chart %>%
 
 # TESTING ON THIS CHART
 tx_chart_gg <- ggplot(tx_chart) +
-  geom_segment_interactive(color="#6a51a3", aes(tooltip = paste0("Fenceline population in poverty:", pct_poverty,"%"), xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_poverty_pop, yend=pct_poverty, data_id = refinery_names), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
-  geom_point( aes(x=refinery_names, y=state_pc_poverty_pop), color="#6a51a3", size=1.5 ) +
-  geom_point_interactive(aes(tooltip = paste0("Toxic waste released (millions lbs):", total_releases_mil),
-                             size = total_releases_mil, x=refinery_names, y=0, data_id = refinery_names), alpha = 0.5) +
+  geom_segment(color="blue", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_poverty_pop, yend=pct_poverty), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=refinery_names, y=state_pc_poverty_pop), color="blue", size=1.5 ) +
+  geom_point_interactive(aes(tooltip = paste0("Toxic waste released (million lbs): ", round(total_releases_mil,2)),
+                             size = total_releases_mil, x=refinery_names, y=0, data_id = refinery_names), alpha = 0.5, color="red") +
   scale_size_area(max_size = 10) +
   scale_y_continuous(limits=c(-10,70), breaks = c(20,40,60)) +
   theme_light() +
@@ -347,15 +347,21 @@ tx_chart_gg <- ggplot(tx_chart) +
     legend.position = "none",
     panel.border = element_blank(),
     panel.grid.minor.x = element_blank(),
-    panel.grid.major.y = element_blank()) +
-  xlab("Refinery, by toxic waste produced") +
-  ylab("% fenceline community in poverty, compared to statewide") +
-  geom_hline(yintercept=0, size=0.1) +
+    panel.grid.major.y = element_blank(),
+    axis.ticks = element_blank(),
+    plot.title = element_text(color = "red"),
+    plot.subtitle = element_text(color = "red"),
+    axis.title = element_text(color = "blue",
+                              hjust = -0.2)) +
+  xlab("") +
+  labs(title="Toxic emissions", subtitle="Hover for details", color="red") +
+  ylab("% in poverty (arrow: local; point: state)") +
+  geom_hline(yintercept=0, size=0.1, color="red") +
   coord_flip()
 
-tx_chart_interactive <- ggiraph(code = print(tx_chart_gg), height_svg=4,
+tx_chart_interactive <- ggiraph(code = print(tx_chart_gg), height_svg=5,
                                 hover_css = "cursor:pointer;fill-opacity:0.8;stroke:red",
-                                tooltip_extra_css = "background-color:#f0f0f0;color:black;padding:5px")
+                                tooltip_extra_css = "background-color:#f8f8f8;color:red;font-family:'Helvetica';font-size:10px;padding:2px")
 print(tx_chart_interactive)
 
 
