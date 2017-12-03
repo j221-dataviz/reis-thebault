@@ -334,12 +334,11 @@ la_chart <- la_chart %>%
 
 # plotting charts for poverty
 
-# TESTING ON THIS CHART
-tx_chart_gg <- ggplot(tx_chart) +
-  geom_segment(color="blue", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_poverty_pop, yend=pct_poverty), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
-  geom_point( aes(x=refinery_names, y=state_pc_poverty_pop), color="blue", size=1.5 ) +
+tx_poverty_gg <- ggplot(tx_chart) +
+  geom_segment(color="#6a51a3", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_poverty_pop, yend=pct_poverty), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=refinery_names, y=state_pc_poverty_pop), color="#6a51a3", size=1.5 ) +
   geom_point_interactive(aes(tooltip = paste0("Toxic waste released (million lbs): ", round(total_releases_mil,2)),
-                             size = total_releases_mil, x=refinery_names, y=0, data_id = refinery_names), alpha = 0.5, color="red") +
+                             size = total_releases_mil, x=refinery_names, y=0, data_id = refinery_names), alpha = 0.5, color="#e6550d") +
   scale_size_area(max_size = 10) +
   scale_y_continuous(limits=c(-10,70), breaks = c(20,40,60)) +
   theme_light() +
@@ -349,26 +348,27 @@ tx_chart_gg <- ggplot(tx_chart) +
     panel.grid.minor.x = element_blank(),
     panel.grid.major.y = element_blank(),
     axis.ticks = element_blank(),
-    plot.title = element_text(color = "red"),
-    plot.subtitle = element_text(color = "red"),
-    axis.title = element_text(color = "blue",
+    plot.title = element_text(color = "#e6550d"),
+    plot.subtitle = element_text(color = "#e6550d"),
+    axis.title = element_text(color = "#6a51a3",
                               hjust = -0.2)) +
   xlab("") +
-  labs(title="Toxic emissions", subtitle="Hover for details", color="red") +
+  labs(title="Toxic emissions", subtitle="Hover for details", color="#e6550d") +
   ylab("% in poverty (arrow: local; point: state)") +
-  geom_hline(yintercept=0, size=0.1, color="red") +
+  geom_hline(yintercept=0, size=0.1, color="#e6550d") +
   coord_flip()
 
-tx_chart_interactive <- ggiraph(code = print(tx_chart_gg), height_svg=5,
-                                hover_css = "cursor:pointer;fill-opacity:0.8;stroke:red",
-                                tooltip_extra_css = "background-color:#f8f8f8;color:red;font-family:'Helvetica';font-size:10px;padding:2px")
-print(tx_chart_interactive)
+tx_poverty_interactive <- ggiraph(code = print(tx_poverty_gg), height_svg=5,
+                                  hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
+                                  tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
+print(tx_poverty_interactive)
 
 
-ggplot(ca_chart) +
+ca_poverty_gg <- ggplot(ca_chart) +
   geom_segment(color="#6a51a3", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_poverty_pop, yend=pct_poverty), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
   geom_point( aes(x=refinery_names, y=state_pc_poverty_pop), color="#6a51a3", size=1.5 ) +
-  geom_point( aes(size=total_releases_mil, x=refinery_names, y=0), alpha = 0.5) +
+  geom_point_interactive(aes(tooltip = paste0("Toxic waste released (million lbs): ", round(total_releases_mil,2)),
+                             size = total_releases_mil, x=refinery_names, y=0, data_id = refinery_names), alpha = 0.5, color="#e6550d") +
   scale_size_area(max_size = 10) +
   scale_y_continuous(limits=c(-10,70), breaks = c(20,40,60)) +
   theme_light() +
@@ -376,16 +376,28 @@ ggplot(ca_chart) +
     legend.position = "none",
     panel.border = element_blank(),
     panel.grid.minor.x = element_blank(),
-    panel.grid.major.y = element_blank()) +
+    panel.grid.major.y = element_blank(),
+    axis.ticks = element_blank(),
+    plot.title = element_text(color = "#e6550d"),
+    plot.subtitle = element_text(color = "#e6550d"),
+    axis.title = element_text(color = "#6a51a3",
+                              hjust = -0.2)) +
   xlab("") +
-  ylab("") +
-  geom_hline(yintercept=0, size=0.1) +
+  labs(title="Toxic emissions", subtitle="Hover for details", color="#e6550d") +
+  ylab("% in poverty (arrow: local; point: state)") +
+  geom_hline(yintercept=0, size=0.1, color="#e6550d") +
   coord_flip()
 
-ggplot(la_chart) +
+ca_poverty_interactive <- ggiraph(code = print(ca_poverty_gg), height_svg=5,
+                                  hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
+                                  tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
+print(ca_poverty_interactive)
+
+la_poverty_gg <- ggplot(la_chart) +
   geom_segment(color="#6a51a3", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_poverty_pop, yend=pct_poverty), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
   geom_point( aes(x=refinery_names, y=state_pc_poverty_pop), color="#6a51a3", size=1.5 ) +
-  geom_point( aes(size=total_releases_mil, x=refinery_names, y=0), alpha = 0.5) +
+  geom_point_interactive(aes(tooltip = paste0("Toxic waste released (million lbs): ", round(total_releases_mil,2)),
+                             size = total_releases_mil, x=refinery_names, y=0, data_id = refinery_names), alpha = 0.5, color="#e6550d") +
   scale_size_area(max_size = 10) +
   scale_y_continuous(limits=c(-10,70), breaks = c(20,40,60)) +
   theme_light() +
@@ -393,62 +405,294 @@ ggplot(la_chart) +
     legend.position = "none",
     panel.border = element_blank(),
     panel.grid.minor.x = element_blank(),
-    panel.grid.major.y = element_blank()) +
+    panel.grid.major.y = element_blank(),
+    axis.ticks = element_blank(),
+    plot.title = element_text(color = "#e6550d"),
+    plot.subtitle = element_text(color = "#e6550d"),
+    axis.title = element_text(color = "#6a51a3",
+                              hjust = -0.2)) +
   xlab("") +
-  ylab("") +
-  geom_hline(yintercept=0, size=0.1) +
+  labs(title="Toxic emissions", subtitle="Hover for details", color="#e6550d") +
+  ylab("% in poverty (arrow: local; point: state)") +
+  geom_hline(yintercept=0, size=0.1, color="#e6550d") +
   coord_flip()
+
+la_poverty_interactive <- ggiraph(code = print(la_poverty_gg), height_svg=5,
+                                  hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
+                                  tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
+print(la_poverty_interactive)
 
 # plotting charts for race
-ggplot(tx_chart) +
-  geom_segment(color="#6a51a3", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_minority_pop, yend=pct_minority), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
-  geom_point( aes(x=refinery_names, y=state_pc_minority_pop), color="#6a51a3", size=1.5 ) +
-  geom_point( aes(size=total_releases_mil, x=refinery_names, y=0), alpha = 0.5) +
+tx_minority_gg <- ggplot(tx_chart) +
+  geom_segment(color="#006d2c", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_minority_pop, yend=pct_minority), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=refinery_names, y=state_pc_minority_pop), color="#006d2c", size=1.5 ) +
+  geom_point_interactive(aes(tooltip = paste0("Toxic waste released (million lbs): ", round(total_releases_mil,2)),
+                             size = total_releases_mil, x=refinery_names, y=0, data_id = refinery_names), alpha = 0.5, color="#e6550d") +
   scale_size_area(max_size = 10) +
-  scale_y_continuous(limits=c(-10,70), breaks = c(20,40,60)) +
+  scale_y_continuous(limits=c(-10,100), breaks = c(20,40,60,80)) +
   theme_light() +
   theme(
     legend.position = "none",
     panel.border = element_blank(),
     panel.grid.minor.x = element_blank(),
-    panel.grid.major.y = element_blank()) +
+    panel.grid.major.y = element_blank(),
+    axis.ticks = element_blank(),
+    plot.title = element_text(color = "#e6550d"),
+    plot.subtitle = element_text(color = "#e6550d"),
+    axis.title = element_text(color = "#006d2c",
+                              hjust = -0.2)) +
   xlab("") +
-  ylab("") +
-  geom_hline(yintercept=0, size=0.1) +
+  labs(title="Toxic emissions", subtitle="Hover for details", color="#e6550d") +
+  ylab("% racial minority (arrow: local; point: state)") +
+  geom_hline(yintercept=0, size=0.1, color="#e6550d") +
   coord_flip()
 
-ggplot(ca_chart) +
-  geom_segment(color="#6a51a3", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_minority_pop, yend=pct_minority), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
-  geom_point( aes(x=refinery_names, y=state_pc_minority_pop), color="#6a51a3", size=1.5 ) +
-  geom_point( aes(size=total_releases_mil, x=refinery_names, y=0), alpha = 0.5) +
+tx_minority_interactive <- ggiraph(code = print(tx_minority_gg), height_svg=5,
+                                   hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
+                                   tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
+print(tx_minority_interactive)
+
+
+ca_minority_gg <- ggplot(ca_chart) +
+  geom_segment(color="#006d2c", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_minority_pop, yend=pct_minority), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=refinery_names, y=state_pc_minority_pop), color="#006d2c", size=1.5 ) +
+  geom_point_interactive(aes(tooltip = paste0("Toxic waste released (million lbs): ", round(total_releases_mil,2)),
+                             size = total_releases_mil, x=refinery_names, y=0, data_id = refinery_names), alpha = 0.5, color="#e6550d") +
   scale_size_area(max_size = 10) +
-  scale_y_continuous(limits=c(-10,90), breaks = c(20,40,60)) +
+  scale_y_continuous(limits=c(-10,100), breaks = c(20,40,60,80)) +
   theme_light() +
   theme(
     legend.position = "none",
     panel.border = element_blank(),
     panel.grid.minor.x = element_blank(),
-    panel.grid.major.y = element_blank()) +
+    panel.grid.major.y = element_blank(),
+    axis.ticks = element_blank(),
+    plot.title = element_text(color = "#e6550d"),
+    plot.subtitle = element_text(color = "#e6550d"),
+    axis.title = element_text(color = "#006d2c",
+                              hjust = -0.2)) +
   xlab("") +
-  ylab("") +
-  geom_hline(yintercept=0, size=0.1) +
+  labs(title="Toxic emissions", subtitle="Hover for details", color="#e6550d") +
+  ylab("% racial minority (arrow: local; point: state)") +
+  geom_hline(yintercept=0, size=0.1, color="#e6550d") +
   coord_flip()
 
-ggplot(la_chart) +
-  geom_segment(color="#6a51a3", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_minority_pop, yend=pct_minority), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
-  geom_point( aes(x=refinery_names, y=state_pc_minority_pop), color="#6a51a3", size=1.5 ) +
-  geom_point( aes(size=total_releases_mil, x=refinery_names, y=0), alpha = 0.5) +
+ca_minority_interactive <- ggiraph(code = print(ca_minority_gg), height_svg=5,
+                                   hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
+                                   tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
+print(ca_minority_interactive)
+
+la_minority_gg <- ggplot(la_chart) +
+  geom_segment(color="#006d2c", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_minority_pop, yend=pct_minority), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=refinery_names, y=state_pc_minority_pop), color="#006d2c", size=1.5 ) +
+  geom_point_interactive(aes(tooltip = paste0("Toxic waste released (million lbs): ", round(total_releases_mil,2)),
+                             size = total_releases_mil, x=refinery_names, y=0, data_id = refinery_names), alpha = 0.5, color="#e6550d") +
   scale_size_area(max_size = 10) +
-  scale_y_continuous(limits=c(-10,70), breaks = c(20,40,60)) +
+  scale_y_continuous(limits=c(-10,100), breaks = c(20,40,60,80)) +
   theme_light() +
   theme(
     legend.position = "none",
     panel.border = element_blank(),
     panel.grid.minor.x = element_blank(),
-    panel.grid.major.y = element_blank()) +
+    panel.grid.major.y = element_blank(),
+    axis.ticks = element_blank(),
+    plot.title = element_text(color = "#e6550d"),
+    plot.subtitle = element_text(color = "#e6550d"),
+    axis.title = element_text(color = "#006d2c",
+                              hjust = -0.2)) +
   xlab("") +
-  ylab("") +
-  geom_hline(yintercept=0, size=0.1) +
+  labs(title="Toxic emissions", subtitle="Hover for details", color="#e6550d") +
+  ylab("% racial minority (arrow: local; point: state)") +
+  geom_hline(yintercept=0, size=0.1, color="#e6550d") +
   coord_flip()
 
+la_minority_interactive <- ggiraph(code = print(la_minority_gg), height_svg=5,
+                                   hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
+                                   tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
+print(la_minority_interactive)
+
+
+
+# making poverty and race charts like the above, but for most polluting refineries overall, not by state
+
+# creating df for top 10,15,20 refineries by toxic released
+all_chart <- refineries_compare %>%
+  filter(radius==3) %>%
+  arrange(desc(total_releases_mil)) %>%
+  head(15)
+
+#creating new columns with edited refinery names
+all_chart <- all_chart %>%
+  mutate(refinery_names = c("Blanchard (Texas City, TX)", "Delaware City (Delaware City, DE)", "Phillips 66 (Lindon, NJ)", "Valero (Corpus Christi, TX)", "Chevron (El Segundo, CA)", "ExxonMobil (Baton Rouge, LA)","ExxonMobil (Baytown, TX)", "Valero (Texas City,TX)", "Chevron (Pascagoula, MS)", "Citgo (Sulphur,LA)", "Diamond Shamrock (Sunray, TX)", "Phillips 66 (Westlake, LA)",  "Motiva (Port Arthur, TX)", "Flint Hills West (Corpus Christi, TX)", "Paulsboro (Paulsboro, NJ)"))
+
+#adding U.S. rates for person in poverty and minorities
+# pct of persons in poverty nationally: 13.82
+# pct of nonwhite persons nationally: 35.33
+
+all_chart <- all_chart %>%
+  mutate(nat_pc_poverty = 13.82, nat_pc_minority = 35.33)
+
+# creating chart for poverty 
+all_poverty_gg <- ggplot(all_chart) +
+  geom_segment(color="#6a51a3", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_poverty_pop, yend=pct_poverty), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=refinery_names, y=state_pc_poverty_pop), color="#6a51a3", size=1.5 ) +
+  geom_point_interactive(aes(tooltip = paste0("Toxic waste released (million lbs): ", round(total_releases_mil,2)),
+                             size = total_releases_mil, x=refinery_names, y=0, data_id = refinery_names), alpha = 0.5, color="#e6550d") +
+  scale_size_area(max_size = 10) +
+  scale_y_continuous(limits=c(-10,70), breaks = c(10,20,40,60)) +
+  theme_light() +
+  theme(
+    legend.position = "none",
+    panel.border = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y = element_blank(),
+    axis.ticks = element_blank(),
+    plot.title = element_text(color = "#e6550d"),
+    plot.subtitle = element_text(color = "#e6550d"),
+    axis.title = element_text(color = "#6a51a3",
+                              hjust = -0.2)) +
+  xlab("") +
+  labs(title="Toxic emissions", subtitle="Hover for details", color="#e6550d") +
+  ylab("% in poverty (arrow: local; point: state)") +
+  geom_hline(yintercept=0, size=0.1, color="#e6550d") +
+  coord_flip()
+
+all_poverty_interactive <- ggiraph(code = print(all_poverty_gg), height_svg=5,
+                                   hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
+                                   tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
+print(all_poverty_interactive)
+
+
+# creating chart for minority
+all_minority_gg <- ggplot(all_chart) +
+  geom_segment(color="#006d2c", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=state_pc_minority_pop, yend=pct_minority), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=refinery_names, y=state_pc_minority_pop), color="#006d2c", size=1.5 ) +
+  geom_point_interactive(aes(tooltip = paste0("Toxic waste released (million lbs): ", round(total_releases_mil,2)),
+                             size = total_releases_mil, x=refinery_names, y=0, data_id = refinery_names), alpha = 0.5, color="#e6550d") +
+  scale_size_area(max_size = 10) +
+  scale_y_continuous(limits=c(-10,100), breaks = c(20,40,60,80)) +
+  theme_light() +
+  theme(
+    legend.position = "none",
+    panel.border = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y = element_blank(),
+    axis.ticks = element_blank(),
+    plot.title = element_text(color = "#e6550d"),
+    plot.subtitle = element_text(color = "#e6550d"),
+    axis.title = element_text(color = "#006d2c",
+                              hjust = -0.2)) +
+  xlab("") +
+  labs(title="Toxic emissions", subtitle="Hover for details", color="#e6550d") +
+  ylab("% racial minority (arrow: local; point: state)") +
+  geom_hline(yintercept=0, size=0.1, color="#e6550d") +
+  coord_flip()
+
+all_minority_interactive <- ggiraph(code = print(all_minority_gg), height_svg=5,
+                                    hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
+                                    tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
+print(all_minority_interactive)
+
+
+  
+# try overall charts compared to US poverty and minority rates instead of states
+
+# creating chart for poverty 
+all_poverty_gg <- ggplot(all_chart) +
+  geom_segment(color="#6a51a3", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=nat_pc_poverty, yend=pct_poverty), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=refinery_names, y=nat_pc_poverty), color="#6a51a3", size=1.5 ) +
+  geom_point_interactive(aes(tooltip = paste0("Toxic waste released (million lbs): ", round(total_releases_mil,2)),
+                             size = total_releases_mil, x=refinery_names, y=0, data_id = refinery_names), alpha = 0.5, color="#e6550d") +
+  scale_size_area(max_size = 10) +
+  scale_y_continuous(limits=c(-10,70), breaks = c(10,20,40,60)) +
+  theme_light() +
+  theme(
+    legend.position = "none",
+    panel.border = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y = element_blank(),
+    axis.ticks = element_blank(),
+    plot.title = element_text(color = "#e6550d"),
+    plot.subtitle = element_text(color = "#e6550d"),
+    axis.title = element_text(color = "#6a51a3",
+                              hjust = -0.2)) +
+  xlab("") +
+  labs(title="Toxic emissions", subtitle="Hover for details", color="#e6550d") +
+  ylab("% in poverty (arrow: local; point: national)") +
+  geom_hline(yintercept=0, size=0.1, color="#e6550d") +
+  coord_flip()
+
+all_poverty_interactive <- ggiraph(code = print(all_poverty_gg), height_svg=5,
+                                   hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
+                                   tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
+print(all_poverty_interactive)
+
+
+# creating chart for minority
+all_minority_gg <- ggplot(all_chart) +
+  geom_segment(color="#006d2c", aes(xend=refinery_names, x=reorder(refinery_names, total_releases_mil), y=nat_pc_minority, yend=pct_minority), arrow = arrow(length = unit(0.2,"cm"), type="closed")) +
+  geom_point( aes(x=refinery_names, y=nat_pc_minority), color="#006d2c", size=1.5 ) +
+  geom_point_interactive(aes(tooltip = paste0("Toxic waste released (million lbs): ", round(total_releases_mil,2)),
+                             size = total_releases_mil, x=refinery_names, y=0, data_id = refinery_names), alpha = 0.5, color="#e6550d") +
+  scale_size_area(max_size = 10) +
+  scale_y_continuous(limits=c(-10,100), breaks = c(20,40,60,80)) +
+  theme_light() +
+  theme(
+    legend.position = "none",
+    panel.border = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.grid.major.y = element_blank(),
+    axis.ticks = element_blank(),
+    plot.title = element_text(color = "#e6550d"),
+    plot.subtitle = element_text(color = "#e6550d"),
+    axis.title = element_text(color = "#006d2c",
+                              hjust = -0.2)) +
+  xlab("") +
+  labs(title="Toxic emissions", subtitle="Hover for details", color="#e6550d") +
+  ylab("% racial minority (arrow: local; point: national)") +
+  geom_hline(yintercept=0, size=0.1, color="#e6550d") +
+  coord_flip()
+
+all_minority_interactive <- ggiraph(code = print(all_minority_gg), height_svg=5,
+                                    hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
+                                    tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
+print(all_minority_interactive)
+
+
+# making scatter chart interactive for minority and poverty
+
+poverty_plot <- ggplot(subset(refineries_compare, radius==3), aes(x=poverty_compare, y=total_releases_mil)) +
+  geom_point_interactive(aes(tooltip = paste0(facility_name, "<br>", "Toxic waste released (million lbs): ", round(total_releases_mil,2), "<br>",round(poverty_compare,2), " times % in poverty, compared to state"),
+                             size = persons_below_poverty_level, x=poverty_compare, y=total_releases_mil, data_id = frs_id), alpha = 0.5, color="#54278f") +
+  ggtitle("Population within 3 miles of refinery") +
+  scale_x_continuous(breaks = c(0,0.5,1,2,3,4,5), labels = c("Zero","Half","","Twice","3 times","4 times","5 times")) +
+  scale_y_continuous(labels = comma) +
+  scale_size_area(max_size = 10, guide = FALSE) +
+  xlab("% population in poverty, compared to % for entire state") +
+  ylab("Toxic releases (million lbs)") +
+  geom_vline(xintercept = 1, linetype = "dotted") +
+  theme_minimal()
+  
+poverty_plot_interactive <- ggiraph(code = print(poverty_plot), height_svg=5,
+                                      hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
+                                      tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
+print(poverty_plot_interactive)
+
+
+minority_plot <- ggplot(subset(refineries_compare, radius==3), aes(x=minority_compare, y=total_releases_mil)) +
+  geom_point_interactive(aes(tooltip = paste0(facility_name, "<br>", "Toxic waste released (million lbs): ", round(total_releases_mil,2), "<br>",round(minority_compare,2), " times % racial minority, compared to state"),
+                             size = minority_pop, x=minority_compare, y=total_releases_mil, data_id = frs_id), alpha = 0.5, color="#006d2c") +
+  ggtitle("Population within 3 miles of refinery") +
+  scale_x_continuous(breaks = c(0,0.5,1,2,3,4), labels = c("Zero","Half","","Twice","3 times","4 times")) +
+  scale_y_continuous(labels = comma) +
+  scale_size_area(max_size = 10, guide = FALSE) +
+  xlab("% minority population, compared to % for entire state") +
+  ylab("Toxic releases (million lbs)") +
+  geom_vline(xintercept = 1, linetype = "dotted") +
+  theme_minimal()
+
+minority_plot_interactive <- ggiraph(code = print(minority_plot), height_svg=5,
+                                     hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
+                                     tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
+print(minority_plot_interactive)
 
