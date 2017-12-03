@@ -673,7 +673,7 @@ poverty_plot <- ggplot(subset(refineries_compare, radius==3), aes(x=poverty_comp
   geom_vline(xintercept = 1, linetype = "dotted") +
   theme_minimal()
   
-poverty_plot_interactive <- ggiraph(code = print(poverty_plot), height_svg=5,
+poverty_plot_interactive <- ggiraph(code = print(poverty_plot), height_svg=4.5,
                                       hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
                                       tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
 print(poverty_plot_interactive)
@@ -691,8 +691,69 @@ minority_plot <- ggplot(subset(refineries_compare, radius==3), aes(x=minority_co
   geom_vline(xintercept = 1, linetype = "dotted") +
   theme_minimal()
 
-minority_plot_interactive <- ggiraph(code = print(minority_plot), height_svg=5,
+minority_plot_interactive <- ggiraph(code = print(minority_plot), height_svg=4.5,
                                      hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
                                      tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
 print(minority_plot_interactive)
+
+
+#finding relationship between refinery location and amount of pollution and presence of African Americans 
+
+# population
+population <- get_decennial(geography = "state", 
+                            variables = "",
+                            year = 2010) %>%
+  rename(population = value)  %>%
+  select(1,2,4)
+
+# black population (black alone, not hispanic)
+black_population <- get_decennial(geography = "state",
+                                  variables = "P0090006",
+                                  year = 2010) %>%
+  rename(black_population = value) %>%
+  select(1,2,4)
+
+# join these  
+black_population <- inner_join(black_population,population)
+
+black_population <- black_population %>%
+  select(1,2,5,3)
+
+black_population <- black_population %>%
+  mutate(pct_black_population = round(black_population/population*100,2))
+
+#adding black population onto refinery compare
+
+refineries_demo_release <- read_csv('refineries_demo_release_clean.csv')
+
+black_population <- inner_join(black_population, state_abb, by = c("NAME" = "State"))
+
+refineries_black_pop <- inner_join(refineries_demo_release, black_population, by = c("state" = "Abbreviation"))
+
+refineries_black_pop <- refineries_black_pop %>%
+  rename(state_black_pop = black_population,
+         state_pct_black_pop = pct_black_population)
+
+refineries_black_pop <- refineries_black_pop %>%
+  mutate(pct_aa = pct_aa*100)
+
+refineries_black_pop <- refineries_black_pop %>%
+  mutate(black_compare = pct_aa/state_pct_black_pop)
+
+refineries_black_pop <- refineries_black_pop %>%
+  rename(total_releases = `total_releases_on-off-site_lbs`) %>%
+  mutate(total_releases_mil = total_releases/10^6)
+
+
+# plotting relationship between refinery location and black population
+ggplot(subset(refineries_black_pop, radius==3), aes(x=black_compare, y=total_releases_mil)) +
+  geom_point(aes(size=african_american_pop), color = "red", alpha = 0.5) +
+  ggtitle("Population within 3 miles of refinery") +
+  scale_x_continuous(breaks = c(0,0.5,1,2,3,4,5,6,7), labels = c("Zero","Half","","Twice","3 times","4 times", "5 times", "6 times", "7 times")) +
+  scale_y_continuous(labels = comma) +
+  scale_size_area(max_size = 10, guide = FALSE) +
+  xlab("% black population, compared to % for entire state") +
+  ylab("Toxic releases (million lbs)") +
+  geom_vline(xintercept = 1, linetype = "dotted") +
+  theme_minimal()
 
