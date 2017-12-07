@@ -285,12 +285,12 @@ breaks <- quantile(poverty_map$poverty_compare, probs = seq(0,1,0.2), na.rm=TRUE
 binpal <- colorBin("Purples", poverty_map$poverty_compare, breaks)
 
 # mapping refineries with more than x waste by effect on poor
-leaflet() %>%
+poor_map <- leaflet() %>%
   setView(lng = -98.5795, lat = 39.828175, zoom = 4) %>%
   addProviderTiles("CartoDB.Positron") %>%
   addCircles(
     data = poverty_map,
-    radius = sqrt(poverty_map$total_releases_mil)*50000,
+    radius = sqrt(poverty_map$total_releases_mil)*100000,
     color = "#54278f",
     weight = 0.2,
     fillColor = ~binpal(poverty_compare),
@@ -299,8 +299,11 @@ leaflet() %>%
                    "<strong>Total pounds of toxic releases (millions): </strong>", poverty_map$total_releases_mil)
     )
 
+print(poor_map)
 
 
+# save chart as a web page
+saveWidget(poor_map, "poor_map.html", selfcontained = TRUE, libdir = NULL, background = "white")
 
 # creating df of refineries in Texas, Louisiana and California, limiting to top 15 toxic releasers
 tx_chart <- refineries_compare %>%
@@ -547,7 +550,8 @@ all_poverty_gg <- ggplot(all_chart) +
     panel.grid.minor.x = element_blank(),
     panel.grid.major.y = element_blank(),
     axis.ticks = element_blank(),
-    plot.title = element_text(color = "#e6550d"),
+    plot.title = element_text(color = "#e6550d",
+                              hjust = -0.05),
     plot.subtitle = element_text(color = "#e6550d"),
     axis.title = element_text(color = "#6a51a3",
                               hjust = -0.2)) +
@@ -557,10 +561,12 @@ all_poverty_gg <- ggplot(all_chart) +
   geom_hline(yintercept=0, size=0.1, color="#e6550d") +
   coord_flip()
 
-all_poverty_interactive <- ggiraph(code = print(all_poverty_gg), height_svg=5,
+all_poverty_interactive <- ggiraph(code = print(all_poverty_gg), height_svg=4.5,
                                    hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
                                    tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
 print(all_poverty_interactive)
+
+saveWidget(all_poverty_interactive, "all_poverty_interactive.html", selfcontained = TRUE, libdir = NULL, background = "white")
 
 
 # creating chart for minority
@@ -578,7 +584,8 @@ all_minority_gg <- ggplot(all_chart) +
     panel.grid.minor.x = element_blank(),
     panel.grid.major.y = element_blank(),
     axis.ticks = element_blank(),
-    plot.title = element_text(color = "#e6550d"),
+    plot.title = element_text(color = "#e6550d",
+                              hjust = -0.05),
     plot.subtitle = element_text(color = "#e6550d"),
     axis.title = element_text(color = "#006d2c",
                               hjust = -0.2)) +
@@ -588,10 +595,12 @@ all_minority_gg <- ggplot(all_chart) +
   geom_hline(yintercept=0, size=0.1, color="#e6550d") +
   coord_flip()
 
-all_minority_interactive <- ggiraph(code = print(all_minority_gg), height_svg=5,
+all_minority_interactive <- ggiraph(code = print(all_minority_gg), height_svg=4.5,
                                     hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
                                     tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
 print(all_minority_interactive)
+
+saveWidget(all_minority_interactive, "all_minority_interactive.html", selfcontained = TRUE, libdir = NULL, background = "white")
 
 
   
@@ -622,7 +631,7 @@ all_poverty_gg <- ggplot(all_chart) +
   geom_hline(yintercept=0, size=0.1, color="#e6550d") +
   coord_flip()
 
-all_poverty_interactive <- ggiraph(code = print(all_poverty_gg), height_svg=5,
+all_poverty_interactive <- ggiraph(code = print(all_poverty_gg), height_svg=4.5,
                                    hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
                                    tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
 print(all_poverty_interactive)
@@ -653,7 +662,7 @@ all_minority_gg <- ggplot(all_chart) +
   geom_hline(yintercept=0, size=0.1, color="#e6550d") +
   coord_flip()
 
-all_minority_interactive <- ggiraph(code = print(all_minority_gg), height_svg=5,
+all_minority_interactive <- ggiraph(code = print(all_minority_gg), height_svg=4.5,
                                     hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
                                     tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
 print(all_minority_interactive)
@@ -678,6 +687,7 @@ poverty_plot_interactive <- ggiraph(code = print(poverty_plot), height_svg=4.5,
                                       tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
 print(poverty_plot_interactive)
 
+saveWidget(poverty_plot_interactive, "poverty_plot_interactive.html", selfcontained = TRUE, libdir = NULL, background = "white")
 
 minority_plot <- ggplot(subset(refineries_compare, radius==3), aes(x=minority_compare, y=total_releases_mil)) +
   geom_point_interactive(aes(tooltip = paste0(facility_name, "<br>", "Toxic waste released (million lbs): ", round(total_releases_mil,2), "<br>",round(minority_compare,2), " times % racial minority, compared to state"),
@@ -695,6 +705,8 @@ minority_plot_interactive <- ggiraph(code = print(minority_plot), height_svg=4.5
                                      hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
                                      tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
 print(minority_plot_interactive)
+
+saveWidget(minority_plot_interactive, "minority_plot_interactive.html", selfcontained = TRUE, libdir = NULL, background = "white")
 
 
 #finding relationship between refinery location and amount of pollution and presence of African Americans 
@@ -746,14 +758,34 @@ refineries_black_pop <- refineries_black_pop %>%
 
 
 # plotting relationship between refinery location and black population
-ggplot(subset(refineries_black_pop, radius==3), aes(x=black_compare, y=total_releases_mil)) +
-  geom_point(aes(size=african_american_pop), color = "red", alpha = 0.5) +
+aa_plot <- ggplot(subset(refineries_black_pop, radius==3), aes(x=black_compare, y=total_releases_mil)) +
+  geom_point_interactive(aes(tooltip = paste0(facility_name, "<br>", "Toxic waste released (million lbs): ", round(total_releases_mil,2), "<br>",round(black_compare,2), " times % black population, compared to state"),
+                             size = african_american_pop, x=black_compare, y=total_releases_mil, data_id = frs_id), alpha = 0.5, color="red") +
   ggtitle("Population within 3 miles of refinery") +
-  scale_x_continuous(breaks = c(0,0.5,1,2,3,4,5,6,7), labels = c("Zero","Half","","Twice","3 times","4 times", "5 times", "6 times", "7 times")) +
+  scale_x_continuous(breaks = c(0,0.5,1,2,3,4,5,6,7,8), labels = c("Zero","Half","","Twice","3 times","4 times", "5 times", "6 times", "7 times", "8 times")) +
   scale_y_continuous(labels = comma) +
   scale_size_area(max_size = 10, guide = FALSE) +
   xlab("% black population, compared to % for entire state") +
   ylab("Toxic releases (million lbs)") +
   geom_vline(xintercept = 1, linetype = "dotted") +
   theme_minimal()
+
+aa_plot_interactive <- ggiraph(code = print(aa_plot), height_svg=4.5,
+                                       hover_css = "cursor:pointer;fill-opacity:0.8;stroke:#e6550d",
+                                       tooltip_extra_css = "background-color:#f8f8f8;color:#e6550d;font-family:'Helvetica';font-size:10px;padding:2px")
+print(aa_plot_interactive)
+
+# save chart as a web page
+saveWidget(aa_plot_interactive, "aa_plot_interactive.html", selfcontained = TRUE, libdir = NULL, background = "white")
+
+
+
+refineries_compare_3mile <- refineries_compare %>%
+  filter(radius==3)
+
+refineries_black_pop_3mile <- refineries_black_pop %>%
+  filter(radius==3)
+
+
+
 
